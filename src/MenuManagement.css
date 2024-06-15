@@ -1,0 +1,65 @@
+.menu-management {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .menu-category {
+    margin-bottom: 30px;
+  }
+  
+  .menu-items {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+  }
+  
+  .item-info {
+    flex: 1;
+  }
+  
+  .item-name {
+    font-weight: bold;
+  }
+  
+  .delete-btn {
+    background-color: #ff6347;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .delete-btn:hover {
+    background-color: #d13000;
+  }
+  
+  .add-item-form {
+    margin-top: 20px;
+  }
+  
+  .add-item-form input {
+    margin-right: 10px;
+    padding: 5px;
+  }
+  
+  .add-item-form button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .add-item-form button:hover {
+    background-color: #45a049;
+  }
+  
