@@ -1,0 +1,3 @@
+const menuData = {"appetizers":[{"id":1,"name":"Spring Rolls","description":"Crispy rolls with vegetables","price":"$5.99"},{"id":2,"name":"Garlic Bread","description":"Toasted bread with garlic and butter","price":"$3.99"}],"entrees":[{"id":1,"name":"Grilled Chicken","description":"Chicken breast with a side of vegetables","price":"$12.99"},{"id":2,"name":"Steak","description":"Grilled steak with mashed potatoes","price":"$19.99"}],"desserts":[{"id":1,"name":"Cheesecake","description":"Creamy cheesecake with a graham cracker crust","price":"$6.99"},{"id":2,"name":"Chocolate Cake","description":"Rich chocolate cake with chocolate frosting","price":"$5.99"}],"asd":[{"id":1,"name":"ad","description":"asd","price":"asd"}]};
+
+module.exports = menuData;
