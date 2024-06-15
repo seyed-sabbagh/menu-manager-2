@@ -41,7 +41,7 @@ function EditableMenu() {
   };
 
   const saveMenu = () => {
-    axios.post('http://localhost:3001/save-menu', menu)
+    axios.post('http://185.128.40.41:3001/save-menu', menu)
       .then((response) => {
         console.log(response.data);
         alert("منو با موفقیت ذخیره شد!");
