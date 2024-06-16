@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import menuData from './data/menuData.ts'; // Assuming you have the initial data stored in a JSON file
 
-const categoriesList = ["pizza", "fried", "hot_dog", "feed", "burgers","sandwiches","snacks","salad","persian_food"]; // Example list of categories
+const categoriesList = ["pizza", "fried", "hot_dog", "feed", "burgers","sandwiches","snacks","salad","persian_food","pish_ghaza","seafood","Customـfood","Lunchـdinner","sini_majlesi","day_food","cofee","icecream","koktel","damnosh","shake","smothi","majon","cold_bar","glasse","hot_bar"]; // Example list of categories
 
 function EditableMenu() {
   const [menu, setMenu] = useState(menuData);
