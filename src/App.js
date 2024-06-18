@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import menuData from './data/menuData.ts'; // Assuming you have the initial data stored in a JSON file
+import './EditableMenu.css'; // Import CSS file for styling
+// Importing menuData directly
+const menuData = require('./data/menuData.ts');
 
-const categoriesList = ["cake","pizza", "fried", "hot_dog", "feed", "burgers","sandwiches","snacks","salad","persian_food","pish_ghaza","seafood","Customـfood","Lunchـdinner","sini_majlesi","day_food","cofee","icecream","koktel","damnosh","shake","smothi","majon","cold_bar","glasse","hot_bar"]; // Example list of categories
+const categoriesList = Object.keys(menuData); // Extracting categories from menuData keys
 
 function EditableMenu() {
   const [menu, setMenu] = useState(menuData);
   const [newItem, setNewItem] = useState({ category: "", name: "", description: "", price: "" });
+  const [editItemId, setEditItemId] = useState(null);
+  const [editedItem, setEditedItem] = useState({ id: null, category: "", name: "", description: "", price: "" });
 
   const addItem = () => {
     if (newItem.category && newItem.name && newItem.description && newItem.price) {
@@ -56,62 +60,144 @@ function EditableMenu() {
     return Math.random().toString(36).substr(2, 9);
   };
 
+  const handleEdit = (categoryId, itemId) => {
+    const itemToEdit = menu[categoryId].find(item => item.id === itemId);
+    if (itemToEdit) {
+      setEditedItem({
+        id: itemToEdit.id,
+        category: categoryId,
+        name: itemToEdit.name,
+        description: itemToEdit.description,
+        price: itemToEdit.price
+      });
+      setEditItemId(itemId);
+    } else {
+      console.error(`Item with ID ${itemId} not found in category ${categoryId}`);
+    }
+  };
+
+  const saveEditedItem = () => {
+    if (!editedItem.category) {
+      console.error("Category is undefined in editedItem.");
+      return;
+    }
+
+    const updatedMenu = { ...menu };
+    const category = editedItem.category;
+
+    if (updatedMenu.hasOwnProperty(category)) {
+      const updatedItems = updatedMenu[category].map(item =>
+        item.id === editedItem.id ? { ...item, name: editedItem.name, description: editedItem.description, price: editedItem.price } : item
+      );
+      updatedMenu[category] = updatedItems;
+      setMenu(updatedMenu);
+      setEditItemId(null);
+    } else {
+      console.error(`Category '${category}' does not exist in the menu.`);
+      // Handle the error or notify the user appropriately
+    }
+  };
+
+  const cancelEdit = () => {
+    setEditItemId(null);
+    setEditedItem({ id: null, category: "", name: "", description: "", price: "" });
+  };
+
+  const removeItem = (categoryId, itemId) => {
+    const updatedMenu = { ...menu };
+    updatedMenu[categoryId] = updatedMenu[categoryId].filter(item => item.id !== itemId);
+    setMenu(updatedMenu);
+  };
+
   return (
-    <div style={{ fontFamily: 'IRANSans, Arial, sans-serif', maxWidth: '800px', margin: 'auto', padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-      <h1 style={{ textAlign: 'center', marginBottom: '20px', fontSize: '32px', color: '#333' }}>ویرایش منو</h1>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr 1fr', gap: '10px', alignItems: 'center', backgroundColor: '#fff', padding: '10px', borderRadius: '4px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
+    <div className="editable-menu-container">
+      <h1 className="editable-menu-heading">ویرایش منو</h1>
+      <div className="menu-form">
         <select
           value={newItem.category}
           onChange={(e) => handleNewItemChange("category", e.target.value)}
-          style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', fontSize: '14px', textAlign: 'right' }}
+          className="input-field"
         >
           <option value="">انتخاب دسته بندی</option>
           {categoriesList.map((category, index) => (
             <option key={index} value={category}>{category}</option>
           ))}
         </select>
-        <input
-          type="text"
-          placeholder="نام"
-          value={newItem.name}
-          onChange={(e) => handleNewItemChange("name", e.target.value)}
-          style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', fontSize: '14px', textAlign: 'right' }}
-        />
+                  <input
+            type="text"
+            placeholder="نام"
+            value={newItem.name}
+            onChange={(e) => handleNewItemChange("name", e.target.value)}
+            className="input-field"
+          />
+
         <input
           type="text"
           placeholder="توضیحات"
           value={newItem.description}
           onChange={(e) => handleNewItemChange("description", e.target.value)}
-          style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', fontSize: '14px', textAlign: 'right' }}
+          className="input-field"
         />
         <input
           type="text"
           placeholder="قیمت"
           value={newItem.price}
           onChange={(e) => handleNewItemChange("price", e.target.value)}
-          style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', fontSize: '14px', textAlign: 'right' }}
+          className="input-field"
         />
-        <button onClick={addItem} style={{ padding: '8px 16px', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '14px' }}>افزودن آیتم</button>
-        <button onClick={saveMenu} style={{ padding: '8px 16px', backgroundColor: '#008CBA', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '14px' }}>ذخیره منو</button>
+        <button onClick={addItem} className="add-item-button">افزودن آیتم</button>
+        <button onClick={saveMenu} className="save-menu-button">ذخیره منو</button>
       </div>
-      <div style={{ marginTop: '20px' }}>
+      <div className="menu-list">
         {Object.keys(menu).map(category => (
-          <div key={category} style={{ marginBottom: '20px', borderRadius: '4px', backgroundColor: '#fff', padding: '10px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-            <h2 style={{ borderBottom: '1px solid #ccc', paddingBottom: '10px', marginBottom: '10px', fontSize: '18px', color: '#333', textAlign: 'right' }}>{category}</h2>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'right' }}>
+          <div key={category} className="category-container">
+            <h2 className="category-heading">{category}</h2>
+            <table className="items-table">
               <thead>
-                <tr style={{ borderBottom: '1px solid #ccc' }}>
-                  <th style={{ padding: '8px 0' }}>نام</th>
-                  <th style={{ padding: '8px 0' }}>توضیحات</th>
-                  <th style={{ padding: '8px 0' }}>قیمت</th>
+                <tr>
+                  <th>نام</th>
+                  <th>توضیحات</th>
+                  <th>قیمت</th>
+                  <th>عملیات</th>
                 </tr>
               </thead>
               <tbody>
                 {menu[category].map(item => (
-                  <tr key={item.id} style={{ borderBottom: '1px solid #eee' }}>
-                    <td style={{ padding: '8px 0' }}>{item.name}</td>
-                    <td style={{ padding: '8px 0' }}>{item.description}</td>
-                    <td style={{ padding: '8px 0' }}>{item.price}</td>
+                  <tr key={item.id}>
+                    <td>{editItemId === item.id ? (
+                      <input
+                        type="text"
+                        value={editedItem.name}
+                        onChange={(e) => setEditedItem({ ...editedItem, name: e.target.value })}
+                      />
+                    ) : item.name}</td>
+                    <td>{editItemId === item.id ? (
+                      <input
+                        type="text"
+                        value={editedItem.description}
+                        onChange={(e) => setEditedItem({ ...editedItem, description: e.target.value })}
+                      />
+                    ) : item.description}</td>
+                    <td>{editItemId === item.id ? (
+                      <input
+                        type="text"
+                        value={editedItem.price}
+                        onChange={(e) => setEditedItem({ ...editedItem, price: e.target.value })}
+                      />
+                    ) : item.price}</td>
+                    <td>
+                      {editItemId === item.id ? (
+                        <>
+                          <button onClick={saveEditedItem} className="save-button">ذخیره</button>
+                          <button onClick={cancelEdit} className="cancel-button">لغو</button>
+                        </>
+                      ) : (
+                        <>
+                          <button onClick={() => handleEdit(category, item.id)} className="edit-button">ویرایش</button>
+                          <button onClick={() => removeItem(category, item.id)} className="delete-button">حذف</button>
+                        </>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
