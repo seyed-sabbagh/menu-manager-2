@@ -8,30 +8,33 @@ const categoriesList = Object.keys(menuData); // Extracting categories from menu
 
 function EditableMenu() {
   const [menu, setMenu] = useState(menuData);
-  const [newItem, setNewItem] = useState({ category: "", name: "", description: "", price: "" });
+  const [newItem, setNewItem] = useState({ category: "", name: "", description: "", price: "", pictureUrl: "" });
   const [editItemId, setEditItemId] = useState(null);
-  const [editedItem, setEditedItem] = useState({ id: null, category: "", name: "", description: "", price: "" });
+  const [editedItem, setEditedItem] = useState({ id: null, category: "", name: "", description: "", price: "", pictureUrl: "" });
 
   const addItem = () => {
-    if (newItem.category && newItem.name && newItem.description && newItem.price) {
+    if (newItem.category && newItem.name && newItem.description && newItem.price && newItem.pictureUrl) {
       const newMenu = { ...menu };
 
       if (!newMenu[newItem.category]) {
         newMenu[newItem.category] = [];
       }
 
+      const newItemObject = {
+        id: generateUniqueId(),
+        name: newItem.name,
+        description: newItem.description,
+        pictureUrl: newItem.pictureUrl, // Save the picture URL provided by the user
+        price: newItem.price
+      };
+
       newMenu[newItem.category] = [
         ...newMenu[newItem.category],
-        {
-          id: generateUniqueId(),
-          name: newItem.name,
-          description: newItem.description,
-          price: newItem.price
-        }
+        newItemObject
       ];
 
       setMenu(newMenu);
-      setNewItem({ category: "", name: "", description: "", price: "" });
+      setNewItem({ category: "", name: "", description: "", price: "", pictureUrl: "" });
     } else {
       alert("لطفا تمامی فیلدها را پر کنید.");
     }
@@ -45,7 +48,7 @@ function EditableMenu() {
   };
 
   const saveMenu = () => {
-    axios.post('http://185.128.40.41:3001/save-menu', menu)
+    axios.post('http://localhost:3001/save-menu', menu)
       .then((response) => {
         console.log(response.data);
         alert("منو با موفقیت ذخیره شد!");
@@ -68,7 +71,8 @@ function EditableMenu() {
         category: categoryId,
         name: itemToEdit.name,
         description: itemToEdit.description,
-        price: itemToEdit.price
+        price: itemToEdit.price,
+        pictureUrl: itemToEdit.pictureUrl
       });
       setEditItemId(itemId);
     } else {
@@ -87,7 +91,7 @@ function EditableMenu() {
 
     if (updatedMenu.hasOwnProperty(category)) {
       const updatedItems = updatedMenu[category].map(item =>
-        item.id === editedItem.id ? { ...item, name: editedItem.name, description: editedItem.description, price: editedItem.price } : item
+        item.id === editedItem.id ? { ...item, name: editedItem.name, description: editedItem.description, price: editedItem.price, pictureUrl: editedItem.pictureUrl } : item
       );
       updatedMenu[category] = updatedItems;
       setMenu(updatedMenu);
@@ -100,7 +104,7 @@ function EditableMenu() {
 
   const cancelEdit = () => {
     setEditItemId(null);
-    setEditedItem({ id: null, category: "", name: "", description: "", price: "" });
+    setEditedItem({ id: null, category: "", name: "", description: "", price: "", pictureUrl: "" });
   };
 
   const removeItem = (categoryId, itemId) => {
@@ -123,14 +127,13 @@ function EditableMenu() {
             <option key={index} value={category}>{category}</option>
           ))}
         </select>
-                  <input
-            type="text"
-            placeholder="نام"
-            value={newItem.name}
-            onChange={(e) => handleNewItemChange("name", e.target.value)}
-            className="input-field"
-          />
-
+        <input
+          type="text"
+          placeholder="نام"
+          value={newItem.name}
+          onChange={(e) => handleNewItemChange("name", e.target.value)}
+          className="input-field"
+        />
         <input
           type="text"
           placeholder="توضیحات"
@@ -143,6 +146,13 @@ function EditableMenu() {
           placeholder="قیمت"
           value={newItem.price}
           onChange={(e) => handleNewItemChange("price", e.target.value)}
+          className="input-field"
+        />
+        <input
+          type="text"
+          placeholder="لینک تصویر"
+          value={newItem.pictureUrl}
+          onChange={(e) => handleNewItemChange("pictureUrl", e.target.value)}
           className="input-field"
         />
         <button onClick={addItem} className="add-item-button">افزودن آیتم</button>
@@ -158,6 +168,7 @@ function EditableMenu() {
                   <th>نام</th>
                   <th>توضیحات</th>
                   <th>قیمت</th>
+                  <th>لینک تصویر</th>
                   <th>عملیات</th>
                 </tr>
               </thead>
@@ -185,6 +196,13 @@ function EditableMenu() {
                         onChange={(e) => setEditedItem({ ...editedItem, price: e.target.value })}
                       />
                     ) : item.price}</td>
+                    <td>{editItemId === item.id ? (
+                      <input
+                        type="text"
+                        value={editedItem.pictureUrl}
+                        onChange={(e) => setEditedItem({ ...editedItem, pictureUrl: e.target.value })}
+                      />
+                    ) : item.pictureUrl}</td>
                     <td>
                       {editItemId === item.id ? (
                         <>
