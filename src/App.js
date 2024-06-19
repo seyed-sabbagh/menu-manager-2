@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './EditableMenu.css'; // Import CSS file for styling
-// Importing menuData directly
 const menuData = require('./data/menuData.ts');
 
 const categoriesList = Object.keys(menuData); // Extracting categories from menuData keys
@@ -11,6 +10,7 @@ function EditableMenu() {
   const [newItem, setNewItem] = useState({ category: "", name: "", description: "", price: "", pictureUrl: "" });
   const [editItemId, setEditItemId] = useState(null);
   const [editedItem, setEditedItem] = useState({ id: null, category: "", name: "", description: "", price: "", pictureUrl: "" });
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const addItem = () => {
     if (newItem.category && newItem.name && newItem.description && newItem.price) {
@@ -35,6 +35,7 @@ function EditableMenu() {
 
       setMenu(newMenu);
       setNewItem({ category: "", name: "", description: "", price: "", pictureUrl: "" });
+      setSelectedFile(null);
     } else {
       alert("لطفا تمامی فیلدها را پر کنید.");
     }
@@ -45,6 +46,32 @@ function EditableMenu() {
       ...prevNewItem,
       [field]: value
     }));
+  };
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+
+  const handleFileUpload = () => {
+    if (!selectedFile) {
+      alert("لطفا یک تصویر انتخاب کنید.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+
+    axios.post('http://localhost:3001/upload', formData)
+      .then((response) => {
+        // Assuming the response contains the URL of the uploaded image
+        const pictureUrl = response.data.url;
+        setNewItem(prevNewItem => ({ ...prevNewItem, pictureUrl }));
+        alert("تصویر با موفقیت آپلود شد!");
+      })
+      .catch((error) => {
+        console.error("خطا در آپلود تصویر:", error);
+        alert("خطا در آپلود تصویر. لطفا دوباره تلاش کنید.");
+      });
   };
 
   const saveMenu = () => {
@@ -98,7 +125,6 @@ function EditableMenu() {
       setEditItemId(null);
     } else {
       console.error(`Category '${category}' does not exist in the menu.`);
-      // Handle the error or notify the user appropriately
     }
   };
 
@@ -148,6 +174,12 @@ function EditableMenu() {
           onChange={(e) => handleNewItemChange("price", e.target.value)}
           className="input-field"
         />
+        <input
+          type="file"
+          onChange={handleFileChange}
+          className="input-field"
+        />
+        <button onClick={handleFileUpload} className="upload-button">آپلود تصویر</button>
         <button onClick={addItem} className="add-item-button">افزودن آیتم</button>
         <button onClick={saveMenu} className="save-menu-button">ذخیره منو</button>
       </div>
