@@ -202,7 +202,7 @@ function EditableMenu() {
                         value={editedItem.pictureUrl}
                         onChange={(e) => setEditedItem({ ...editedItem, pictureUrl: e.target.value })}
                       />
-                    ) : item.pictureUrl}</td>
+                    ) : <img src={item.pictureUrl} alt={item.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />}</td>
                     <td>
                       {editItemId === item.id ? (
                         <>
