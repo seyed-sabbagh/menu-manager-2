@@ -13,7 +13,7 @@ function EditableMenu() {
   const [editedItem, setEditedItem] = useState({ id: null, category: "", name: "", description: "", price: "", pictureUrl: "" });
 
   const addItem = () => {
-    if (newItem.category && newItem.name && newItem.description && newItem.price && newItem.pictureUrl) {
+    if (newItem.category && newItem.name && newItem.description && newItem.price) {
       const newMenu = { ...menu };
 
       if (!newMenu[newItem.category]) {
@@ -146,13 +146,6 @@ function EditableMenu() {
           placeholder="قیمت"
           value={newItem.price}
           onChange={(e) => handleNewItemChange("price", e.target.value)}
-          className="input-field"
-        />
-        <input
-          type="text"
-          placeholder="لینک تصویر"
-          value={newItem.pictureUrl}
-          onChange={(e) => handleNewItemChange("pictureUrl", e.target.value)}
           className="input-field"
         />
         <button onClick={addItem} className="add-item-button">افزودن آیتم</button>
