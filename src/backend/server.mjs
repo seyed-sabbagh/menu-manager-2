@@ -62,7 +62,7 @@ app.post('/save-menu', async (req, res) => {
 
     menuDataString += ';\n\nmodule.exports = menuData;';
 
-    await fs.writeFile('/Users/fapna/restaurant-manager/menu-manager 2/src/data/menuData.ts', menuDataString);
+    await fs.writeFile('/root/menu-manager-2/src/data/menuData.ts', menuDataString);
     res.status(200).send('Menu saved successfully.');
   } catch (error) {
     console.error("Error saving menu:", error);
@@ -76,7 +76,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
     return res.status(400).send('No file uploaded.');
   }
 
-  const fileUrl = `http://localhost:${PORT}/uploads/${req.file.filename}`;
+  const fileUrl = `http://185.128.40.41:${PORT}/uploads/${req.file.filename}`;
   res.status(200).json({ url: fileUrl });
 });
 
