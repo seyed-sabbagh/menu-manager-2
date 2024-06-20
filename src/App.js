@@ -59,10 +59,11 @@ function EditableMenu() {
       alert("لطفا یک تصویر انتخاب کنید.");
       return;
     }
-  
+
+    setUploading(true);
     const formData = new FormData();
     formData.append('file', selectedFile);
-  
+
     axios.post('http://185.128.40.41:3001/upload', formData)
       .then((response) => {
         // Extracting the file name from the URL
@@ -73,6 +74,9 @@ function EditableMenu() {
       .catch((error) => {
         console.error("خطا در آپلود تصویر:", error);
         alert("خطا در آپلود تصویر. لطفا دوباره تلاش کنید.");
+      })
+      .finally(() => {
+        setUploading(false);
       });
   };
 
@@ -187,20 +191,20 @@ function EditableMenu() {
           className="input-field"
         />
         {selectedFile && (
-  <div className="file-preview">
-    {newItem.pictureUrl ? (
-      <img src={`http://185.128.40.41:3001/uploads/${newItem.pictureUrl}`} alt="Preview" className="preview-image" />
-    ) : (
-      <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="preview-image" />
-    )}
-  </div>
-)}
-        <button onClick={handleFileUpload} className="upload-button">
-          {uploading ? 'در حال آپلود...' : 'آپلود تصویر'}
+          <div className="file-preview">
+            {newItem.pictureUrl ? (
+              <img src={`http://185.128.40.41:3001/uploads/${newItem.pictureUrl}`} alt="Preview" className="preview-image" />
+            ) : (
+              <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="preview-image" />
+            )}
+          </div>
+        )}
+        <button onClick={handleFileUpload} className="upload-button" disabled={uploading}>
+          {uploading ? <div className="loading-spinner"></div> : 'آپلود تصویر'}
         </button>
         <button onClick={addItem} className="add-item-button">افزودن آیتم</button>
-        <button onClick={saveMenu} className="save-menu-button">
-          {savingMenu ? 'در حال ذخیره...' : 'ذخیره منو'}
+        <button onClick={saveMenu} className="save-menu-button" disabled={savingMenu}>
+          {savingMenu ? <div className="loading-spinner"></div> : 'ذخیره منو'}
         </button>
       </div>
       <div className="menu-list">
@@ -222,11 +226,11 @@ function EditableMenu() {
                   <tr key={item.id}>
                     <td>{editItemId === item.id ? (
                       <input
-                      type="text"
-                      value={editedItem.name}
-                      onChange={(e) => setEditedItem({ ...editedItem, name: e.target.value })}
-                      className="edit-input"
-                    />
+                        type="text"
+                        value={editedItem.name}
+                        onChange={(e) => setEditedItem({ ...editedItem, name: e.target.value })}
+                        className="edit-input"
+                      />
                     ) : item.name}</td>
                     <td>{editItemId === item.id ? (
                       <input
