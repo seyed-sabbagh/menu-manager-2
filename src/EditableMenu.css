@@ -1,248 +1,187 @@
 /* EditableMenu.css */
 
-/* General container styles */
+/* Base styles */
 .editable-menu-container {
-    font-family: IRANSans, Arial, sans-serif;
-    max-width: 800px;
-    margin: auto;
-    padding: 20px;
-    background-color: #f0f0f0;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  }
-  
-  /* Heading styles */
-  .editable-menu-heading {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 32px;
-    color: #333;
-  }
-  
-  /* Form container styles */
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: IRANSans, Arial, sans-serif;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.editable-menu-heading {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.menu-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.input-field {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.input-field::placeholder {
+  color: #999;
+}
+
+/* Button styles */
+.upload-button,
+.add-item-button,
+.save-menu-button,
+.edit-button,
+.delete-button,
+.cancel-button,
+.save-button {
+  padding: 10px 20px;
+  margin-right: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+}
+
+.upload-button {
+  background-color: #008CBA;
+  color: white;
+}
+
+.upload-button:hover {
+  background-color: #0077A3;
+}
+
+.add-item-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.add-item-button:hover {
+  background-color: #da190b;
+}
+
+.save-menu-button,
+.save-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.save-menu-button:hover,
+.save-button:hover {
+  background-color: #45a049;
+}
+
+.edit-button {
+  background-color: #f4c20d;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #e3aa0c;
+}
+
+.delete-button,
+.cancel-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.delete-button:hover,
+.cancel-button:hover {
+  background-color: #da190b;
+}
+
+/* Menu list styles */
+.menu-list {
+  margin-top: 20px;
+}
+
+.category-container {
+  margin-bottom: 20px;
+  border-radius: 4px;
+  background-color: #fff;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.category-heading {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #333;
+  text-align: right;
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: right;
+}
+
+.items-table th,
+.items-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.items-table th {
+  font-weight: bold;
+  background-color: #f2f2f2;
+}
+
+.items-table input[type="text"] {
+  width: calc(100% - 20px);
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: right;
+}
+
+.items-table img {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.file-preview {
+  margin-bottom: 10px;
+}
+
+.preview-image {
+  max-width: 100px;
+  max-height: 100px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
   .menu-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr 2fr 1fr;
-    gap: 10px;
-    align-items: center;
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    grid-template-columns: 1fr;
   }
-  
-  /* Input field styles */
-  .menu-form .input-field {
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    text-align: right;
-  }
-  
-  /* Add item and save menu buttons */
-  .add-item-button, .save-menu-button {
-    padding: 8px 16px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .add-item-button:hover, .save-menu-button:hover {
-    background-color: #45a049;
-  }
-  
-  .save-menu-button {
-    background-color: #008CBA;
-    margin-left: 10px;
-  }
-  
-  .save-menu-button:hover {
-    background-color: #007b9c;
-  }
-  
-  /* Menu list container */
-  .menu-list {
-    margin-top: 20px;
-  }
-  
-  /* Category container styles */
-  .category-container {
-    margin-bottom: 20px;
-    border-radius: 4px;
-    background-color: #fff;
-    padding: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  /* Category heading styles */
-  .category-heading {
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-    font-size: 18px;
-    color: #333;
-    text-align: right;
-  }
-  
-  /* Items table styles */
-  .items-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: right;
-  }
-  
-  .items-table th, .items-table td {
-    padding: 10px;
-  }
-  
-  .items-table th {
-    font-weight: bold;
-    background-color: #f2f2f2;
-  }
-  
-  .items-table input[type="text"] {
-    width: calc(100% - 20px);
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    text-align: right;
-  }
-  
-  /* Edit, cancel, save, and delete buttons */
-  .items-table .edit-button, .items-table .cancel-button, .items-table .save-button, .items-table .delete-button {
-    padding: 6px 12px;
-    margin-right: 5px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .items-table .edit-button, .items-table .save-button {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  .items-table .edit-button:hover, .items-table .save-button:hover {
-    background-color: #45a049;
-  }
-  
-  .items-table .cancel-button {
-    background-color: #f44336;
-    color: white;
-  }
-  
-  .items-table .cancel-button:hover {
-    background-color: #da190b;
-  }
-  
-  .items-table .delete-button {
-    background-color: #f44336;
-    color: white;
-  }
-  
-  .items-table .delete-button:hover {
-    background-color: #da190b;
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 768px) {
-    .menu-form {
-      grid-template-columns: 1fr;
-    }
-    
-    .items-table th, .items-table td {
-      font-size: 12px;
-    }
-  }
-  
 
-
-  /* EditableMenu.css */
-
-/* Input field styles */
-.menu-form .input-field {
-    padding: 12px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    text-align: right;
-    transition: border-color 0.3s ease;
+  .items-table th,
+  .items-table td {
+    font-size: 12px;
   }
-  
-  .menu-form .input-field:focus {
-    outline: none;
-    border-color: #4CAF50;
-  }
-  
-  .menu-form .input-field::placeholder {
-    color: #999;
-  }
-  
-
-  /* EditableMenu.css */
-
-/* Input field base style */
-.input-field {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box; /* Ensures padding and border are included in element's total width and height */
-    transition: border-color 0.3s ease;
-  }
-  /* EditableMenu.css */
-
-/* Base Input Style */
-.input-field {
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
-  }
-  
-  /* Focus state */
-  .input-field:focus {
-    outline: none;
-    border-color: #4CAF50;
-  }
-  
-  /* Placeholder text */
-  .input-field::placeholder {
-    color: #999;
-  }
-  
-  /* Error state */
-  .input-field.error {
-    border-color: #f44336;
-  }
-  
-  /* Disabled state */
-  .input-field:disabled {
-    background-color: #f0f0f0;
-    cursor: not-allowed;
-  }
-  
-  /* Success state */
-  .input-field.success {
-    border-color: #4CAF50;
-  }
-  
-  /* Responsive Styles */
-  @media (max-width: 768px) {
-    .input-field {
-      font-size: 14px; /* Decrease font size for smaller screens */
-      padding: 10px; /* Adjust padding */
-    }
-  }
-  
+}

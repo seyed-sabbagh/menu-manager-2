@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './EditableMenu.css'; // Import CSS file for styling
-const menuData = require('./data/menuData.ts');
+const menuData = require('./data/menuData.ts'); // Assuming menuData.ts contains initial menu data
 
 const categoriesList = Object.keys(menuData); // Extracting categories from menuData keys
 
@@ -11,6 +11,8 @@ function EditableMenu() {
   const [editItemId, setEditItemId] = useState(null);
   const [editedItem, setEditedItem] = useState({ id: null, category: "", name: "", description: "", price: "", pictureUrl: "" });
   const [selectedFile, setSelectedFile] = useState(null);
+  const [uploading, setUploading] = useState(false); // State for image upload loading indicator
+  const [savingMenu, setSavingMenu] = useState(false); // State for saving menu loading indicator
 
   const addItem = () => {
     if (newItem.category && newItem.name && newItem.description && newItem.price && newItem.pictureUrl) {
@@ -57,10 +59,10 @@ function EditableMenu() {
       alert("لطفا یک تصویر انتخاب کنید.");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append('file', selectedFile);
-
+  
     axios.post('http://185.128.40.41:3001/upload', formData)
       .then((response) => {
         // Extracting the file name from the URL
@@ -75,6 +77,8 @@ function EditableMenu() {
   };
 
   const saveMenu = () => {
+    setSavingMenu(true); // Start saving menu indicator
+
     axios.post('http://185.128.40.41:3001/save-menu', menu)
       .then((response) => {
         console.log(response.data);
@@ -83,11 +87,10 @@ function EditableMenu() {
       .catch((error) => {
         console.error("خطا در ذخیره سازی منو:", error);
         alert("خطا در ذخیره سازی منو. لطفا دوباره تلاش کنید.");
+      })
+      .finally(() => {
+        setSavingMenu(false); // Stop saving menu indicator
       });
-  };
-
-  const generateUniqueId = () => {
-    return Math.random().toString(36).substr(2, 9);
   };
 
   const handleEdit = (categoryId, itemId) => {
@@ -139,6 +142,10 @@ function EditableMenu() {
     setMenu(updatedMenu);
   };
 
+  const generateUniqueId = () => {
+    return Math.random().toString(36).substr(2, 9);
+  };
+
   return (
     <div className="editable-menu-container">
       <h1 className="editable-menu-heading">ویرایش منو</h1>
@@ -179,9 +186,22 @@ function EditableMenu() {
           onChange={handleFileChange}
           className="input-field"
         />
-        <button onClick={handleFileUpload} className="upload-button">آپلود تصویر</button>
+        {selectedFile && (
+  <div className="file-preview">
+    {newItem.pictureUrl ? (
+      <img src={`http://185.128.40.41:3001/uploads/${newItem.pictureUrl}`} alt="Preview" className="preview-image" />
+    ) : (
+      <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="preview-image" />
+    )}
+  </div>
+)}
+        <button onClick={handleFileUpload} className="upload-button">
+          {uploading ? 'در حال آپلود...' : 'آپلود تصویر'}
+        </button>
         <button onClick={addItem} className="add-item-button">افزودن آیتم</button>
-        <button onClick={saveMenu} className="save-menu-button">ذخیره منو</button>
+        <button onClick={saveMenu} className="save-menu-button">
+          {savingMenu ? 'در حال ذخیره...' : 'ذخیره منو'}
+        </button>
       </div>
       <div className="menu-list">
         {Object.keys(menu).map(category => (
@@ -202,16 +222,18 @@ function EditableMenu() {
                   <tr key={item.id}>
                     <td>{editItemId === item.id ? (
                       <input
-                        type="text"
-                        value={editedItem.name}
-                        onChange={(e) => setEditedItem({ ...editedItem, name: e.target.value })}
-                      />
+                      type="text"
+                      value={editedItem.name}
+                      onChange={(e) => setEditedItem({ ...editedItem, name: e.target.value })}
+                      className="edit-input"
+                    />
                     ) : item.name}</td>
                     <td>{editItemId === item.id ? (
                       <input
                         type="text"
                         value={editedItem.description}
                         onChange={(e) => setEditedItem({ ...editedItem, description: e.target.value })}
+                        className="edit-input"
                       />
                     ) : item.description}</td>
                     <td>{editItemId === item.id ? (
@@ -219,6 +241,7 @@ function EditableMenu() {
                         type="text"
                         value={editedItem.price}
                         onChange={(e) => setEditedItem({ ...editedItem, price: e.target.value })}
+                        className="edit-input"
                       />
                     ) : item.price}</td>
                     <td>{editItemId === item.id ? (
@@ -226,6 +249,7 @@ function EditableMenu() {
                         type="text"
                         value={editedItem.pictureUrl}
                         onChange={(e) => setEditedItem({ ...editedItem, pictureUrl: e.target.value })}
+                        className="edit-input"
                       />
                     ) : <img src={`http://185.128.40.41:3001/uploads/${item.pictureUrl}`} alt={item.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />}</td>
                     <td>
