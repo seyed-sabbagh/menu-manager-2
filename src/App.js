@@ -13,7 +13,7 @@ function EditableMenu() {
   const [selectedFile, setSelectedFile] = useState(null);
 
   const addItem = () => {
-    if (newItem.category && newItem.name && newItem.description && newItem.price) {
+    if (newItem.category && newItem.name && newItem.description && newItem.price && newItem.pictureUrl) {
       const newMenu = { ...menu };
 
       if (!newMenu[newItem.category]) {
@@ -63,8 +63,8 @@ function EditableMenu() {
 
     axios.post('http://185.128.40.41:3001/upload', formData)
       .then((response) => {
-        // Assuming the response contains the URL of the uploaded image
-        const pictureUrl = response.data.url;
+        // Extracting the file name from the URL
+        const pictureUrl = response.data.url.split('/').pop();
         setNewItem(prevNewItem => ({ ...prevNewItem, pictureUrl }));
         alert("تصویر با موفقیت آپلود شد!");
       })
@@ -227,7 +227,7 @@ function EditableMenu() {
                         value={editedItem.pictureUrl}
                         onChange={(e) => setEditedItem({ ...editedItem, pictureUrl: e.target.value })}
                       />
-                    ) : <img src={item.pictureUrl} alt={item.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />}</td>
+                    ) : <img src={`http://185.128.40.41:3001/uploads/${item.pictureUrl}`} alt={item.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />}</td>
                     <td>
                       {editItemId === item.id ? (
                         <>

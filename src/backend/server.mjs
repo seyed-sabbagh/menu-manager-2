@@ -35,7 +35,7 @@ const convertPictureUrlToRequire = (menuData) => {
   const convert = (item) => {
     if (item.pictureUrl) {
       const pictureUrl = item.pictureUrl.replace(/\\/g, 'ff'); // Remove all backslashes from the path
-      item.pictureUrl = `require("${pictureUrl}").default`;
+      item.pictureUrl = `${pictureUrl}`;
     }
     return item;
   };
