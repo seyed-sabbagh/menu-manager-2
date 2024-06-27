@@ -76,7 +76,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
     return res.status(400).send('No file uploaded.');
   }
 
-  const fileUrl = `http://185.128.40.41:${PORT}/uploads/${req.file.filename}`;
+  const fileUrl = `https://api.sarvcomplex.com:${PORT}/uploads/${req.file.filename}`;
   res.status(200).json({ url: fileUrl });
 });
 

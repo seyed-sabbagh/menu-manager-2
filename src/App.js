@@ -64,7 +64,7 @@ function EditableMenu() {
     const formData = new FormData();
     formData.append('file', selectedFile);
 
-    axios.post('http://185.128.40.41:3001/upload', formData)
+    axios.post('https://api.sarvcomplex.com/upload', formData)
       .then((response) => {
         // Extracting the file name from the URL
         const pictureUrl = response.data.url.split('/').pop();
@@ -83,7 +83,7 @@ function EditableMenu() {
   const saveMenu = () => {
     setSavingMenu(true); // Start saving menu indicator
 
-    axios.post('http://185.128.40.41:3001/save-menu', menu)
+    axios.post('https://api.sarvcomplex.com/save-menu', menu)
       .then((response) => {
         console.log(response.data);
         alert("منو با موفقیت ذخیره شد!");
@@ -193,7 +193,7 @@ function EditableMenu() {
         {selectedFile && (
           <div className="file-preview">
             {newItem.pictureUrl ? (
-              <img src={`http://185.128.40.41:3001/uploads/${newItem.pictureUrl}`} alt="Preview" className="preview-image" />
+              <img src={`https://api.sarvcomplex.com/uploads/${newItem.pictureUrl}`} alt="Preview" className="preview-image" />
             ) : (
               <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="preview-image" />
             )}
@@ -255,7 +255,7 @@ function EditableMenu() {
                         onChange={(e) => setEditedItem({ ...editedItem, pictureUrl: e.target.value })}
                         className="edit-input"
                       />
-                    ) : <img src={`http://185.128.40.41:3001/uploads/${item.pictureUrl}`} alt={item.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />}</td>
+                    ) : <img src={`https://api.sarvcomplex.com/uploads/${item.pictureUrl}`} alt={item.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />}</td>
                     <td>
                       {editItemId === item.id ? (
                         <>
