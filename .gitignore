@@ -23,3 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 src/backend/node_modules
 /Untitled/backend/node_modules
+
+#file
+/src/backend/uploads
+/src/data/
