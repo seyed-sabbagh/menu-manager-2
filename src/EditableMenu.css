@@ -137,3 +137,30 @@ table th {
     width: 100%;
   }
 }
+/* EditableMenu.css */
+
+.next-button,
+.prev-button {
+  background-color: #4CAF50; /* Green background */
+  color: white; /* White text */
+  border: none; /* Remove borders */
+  padding: 10px 20px; /* Padding inside the button */
+  text-align: center; /* Center text */
+  text-decoration: none; /* Remove underline */
+  display: inline-block; /* Make sure it behaves like a block-level element */
+  margin: 10px 5px; /* Add margin between buttons */
+  cursor: pointer; /* Cursor on hover */
+  border-radius: 5px; /* Rounded corners */
+}
+
+.next-button:hover,
+.prev-button:hover {
+  background-color: #45a049; /* Darker green background on hover */
+}
+
+.next-button:disabled,
+.prev-button:disabled {
+  background-color: #cccccc; /* Light gray background when disabled */
+  color: #666666; /* Darker text when disabled */
+  cursor: not-allowed; /* Disable pointer events */
+}

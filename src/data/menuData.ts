@@ -62,6 +62,13 @@ const menuData = {
       "description": "سبزیجات",
       "pictureUrl": "img2.png",
       "price": "195000298000"
+    },
+    {
+      "id": "ufdrsdinv",
+      "name": "asd",
+      "description": "asd",
+      "pictureUrl": "sarv_logo.png",
+      "price": "123"
     }
   ],
   "fried": [

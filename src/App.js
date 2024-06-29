@@ -243,6 +243,7 @@ const EditableMenu = () => {
           <button onClick={handleFileUpload} className="upload-button" disabled={uploading}>
             {uploading ? <div className="loading-spinner"></div> : 'آپلود تصویر'}
           </button>
+          <button onClick={nextStep} className="next-button">مرحله بعد</button>
         </div>
       )}
       {step === 3 && (
