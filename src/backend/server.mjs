@@ -4,6 +4,7 @@ import cors from 'cors';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import config from './config_backend.js';
 
 const app = express();
 const PORT = 3001;
@@ -62,7 +63,7 @@ app.post('/save-menu', async (req, res) => {
 
     menuDataString += ';\n\nmodule.exports = menuData;';
 
-    await fs.writeFile('/root/menu-manager-2/src/data/menuData.ts', menuDataString);
+    await fs.writeFile(`${config.writeFile}`, menuDataString);
     res.status(200).send('Menu saved successfully.');
   } catch (error) {
     console.error("Error saving menu:", error);
@@ -76,7 +77,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
     return res.status(400).send('No file uploaded.');
   }
 
-  const fileUrl = `https://api.sarvcomplex.com:${PORT}/uploads/${req.file.filename}`;
+  const fileUrl = `${config.apiBaseUrl}${PORT}/uploads/${req.file.filename}`;
   res.status(200).json({ url: fileUrl });
 });
 

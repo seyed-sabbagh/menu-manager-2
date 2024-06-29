@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './EditableMenu.css'; // Import CSS file for styling
+import config from './config'; // Import configuration file
 const menuData = require('./data/menuData.ts'); // Assuming menuData.ts contains initial menu data
+
 
 const categoriesList = Object.keys(menuData); // Extracting categories from menuData keys
 
@@ -64,7 +66,7 @@ function EditableMenu() {
     const formData = new FormData();
     formData.append('file', selectedFile);
 
-    axios.post('https://api.sarvcomplex.com/upload', formData)
+    axios.post(`${config.apiBaseUrl}${config.uploadEndpoint}`, formData)
       .then((response) => {
         // Extracting the file name from the URL
         const pictureUrl = response.data.url.split('/').pop();
@@ -83,7 +85,7 @@ function EditableMenu() {
   const saveMenu = () => {
     setSavingMenu(true); // Start saving menu indicator
 
-    axios.post('https://api.sarvcomplex.com/save-menu', menu)
+    axios.post(`${config.apiBaseUrl}${config.saveMenuEndpoint}`, menu)
       .then((response) => {
         console.log(response.data);
         alert("منو با موفقیت ذخیره شد!");
@@ -193,7 +195,7 @@ function EditableMenu() {
         {selectedFile && (
           <div className="file-preview">
             {newItem.pictureUrl ? (
-              <img src={`https://api.sarvcomplex.com/uploads/${newItem.pictureUrl}`} alt="Preview" className="preview-image" />
+              <img src={`${config.apiBaseUrl}${config.uploadEndpoint}${newItem.pictureUrl}`} alt="Preview" className="preview-image" />
             ) : (
               <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="preview-image" />
             )}
@@ -255,7 +257,9 @@ function EditableMenu() {
                         onChange={(e) => setEditedItem({ ...editedItem, pictureUrl: e.target.value })}
                         className="edit-input"
                       />
-                    ) : <img src={`https://api.sarvcomplex.com/uploads/${item.pictureUrl}`} alt={item.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />}</td>
+                    ) : <img src={`${config.apiBaseUrl}${config.uploaddir}${newItem.pictureUrl}${item.pictureUrl}`} alt={item.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />}
+                    
+                    </td>
                     <td>
                       {editItemId === item.id ? (
                         <>

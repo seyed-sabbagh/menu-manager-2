@@ -28,3 +28,5 @@ src/backend/node_modules
 /src/backend/uploads
 /src/data/
 src/data/menuData.ts
+src/backend/config_backend.js
+src/config.js
