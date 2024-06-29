@@ -44,6 +44,7 @@ const EditableMenu = () => {
       setNewItem({ category: "", name: "", description: "", price: "", pictureUrl: "" });
       setSelectedFile(null);
       setStep(1); // Reset to step 1
+      alert('آبتم به صورت موقت به منو اضافه شد')
     } else {
       alert("Please fill in all fields.");
     }

@@ -1,5 +1,27 @@
 /* EditableMenu.css */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  direction: rtl;
+  /* Replace 'Segoe UI' with a Farsi font like 'Tahoma' or a specific Farsi font */
+}
+.input-field,
+.edit-button,
+.remove-button,
+.cancel-button,
+.save-button {
+  text-align: right; /* Align text to the right */
+}
 
+/* Adjust layout */
+.menu-form,
+.menu-list {
+  margin-right: 10px; /* Example margin adjustment */
+}
+
+/* Adjust file upload button */
+.custom-file-upload {
+  text-align: right; /* Align button text to the right */
+}
 .editable-menu-container {
   max-width: 800px;
   margin: auto;
