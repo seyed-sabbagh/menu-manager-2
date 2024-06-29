@@ -18,6 +18,9 @@
 }
 
 .menu-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally */
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
@@ -39,10 +42,17 @@
   text-align: center;
 }
 
-.preview-image {
-  max-width: 100px;
-  max-height: 100px;
+.image-preview {
   margin-top: 10px;
+  width: 100%; /* Adjust width as needed */
+  display: flex;
+  justify-content: center;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 200px; /* Adjust height as needed */
+  object-fit: contain; /* Ensure the image fits within its container */
 }
 
 .upload-button,
@@ -60,6 +70,7 @@
   border-radius: 4px;
   font-size: 16px;
   transition: background-color 0.3s ease;
+  align-self: flex-start; 
 }
 
 .upload-button:disabled,
@@ -163,4 +174,39 @@ table th {
   background-color: #cccccc; /* Light gray background when disabled */
   color: #666666; /* Darker text when disabled */
   cursor: not-allowed; /* Disable pointer events */
+}
+.custom-file-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center items horizontally */
+  margin-bottom: 10px; /* Adjust margin as needed */
+  position: relative;
+  padding: 10px 15px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #333;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.custom-file-upload:hover {
+  background-color: #e0e0e0;
+}
+
+.custom-file-upload input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload i.fa {
+  margin-right: 5px;
+}
+
+.custom-file-upload i.fa:before {
+  font-family: FontAwesome;
+}
+
+.custom-file-upload span {
+  margin-left: 5px;
 }

@@ -45,7 +45,7 @@ const EditableMenu = () => {
       setSelectedFile(null);
       setStep(1); // Reset to step 1
     } else {
-      alert("لطفا تمامی فیلدها را پر کنید.");
+      alert("Please fill in all fields.");
     }
   };
 
@@ -59,7 +59,7 @@ const EditableMenu = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file.size > 100 * 1024) { // Check if the file size exceeds 150KB
-      alert("حجم فایل انتخاب شده بیشتر از 100 کیلوبایت است. لطفا فایل دیگری انتخاب کنید.");
+      alert("Selected file size exceeds 100KB. Please choose another file.");
       setSelectedFile(null); // Reset the selected file
       return;
     }
@@ -68,42 +68,42 @@ const EditableMenu = () => {
 
   const handleFileUpload = () => {
     if (!selectedFile) {
-      alert("لطفا یک تصویر انتخاب کنید.");
+      alert("Please select an image.");
       return;
     }
-
+  
     setUploading(true);
     const formData = new FormData();
     formData.append('file', selectedFile);
-
+  
     axios.post(`${config.apiBaseUrl}${config.uploadEndpoint}`, formData)
       .then((response) => {
         // Extracting the file name from the URL
         const pictureUrl = response.data.url.split('/').pop();
         setNewItem(prevNewItem => ({ ...prevNewItem, pictureUrl }));
-        alert("تصویر با موفقیت آپلود شد!");
+        alert("Image uploaded successfully!");
+        nextStep(); // Move to the next step after image upload
       })
       .catch((error) => {
-        console.error("خطا در آپلود تصویر:", error);
-        alert("خطا در آپلود تصویر. لطفا دوباره تلاش کنید.");
+        console.error("Error uploading image:", error);
+        alert("Error uploading image. Please try again.");
       })
       .finally(() => {
         setUploading(false);
       });
   };
-
+  
   const saveMenu = () => {
     setSavingMenu(true); // Start saving menu indicator
 
     axios.post(`${config.apiBaseUrl}${config.saveMenuEndpoint}`, menu)
       .then((response) => {
         console.log(response.data);
-        alert("منو با موفقیت ذخیره شد!");
+        alert("Menu saved successfully!");
       })
       .catch((error) => {
-        console.error("خطا در ذخیره سازی منو:", error);
-        alert("خطا در ذخیره سازی منو. لطفا دوباره تلاش کنید.");
-        alert(error)
+        console.error("Error saving menu:", error);
+        alert("Error saving menu. Please try again.");
       })
       .finally(() => {
         setSavingMenu(false); // Stop saving menu indicator
@@ -121,7 +121,7 @@ const EditableMenu = () => {
         price: itemToEdit.price,
         pictureUrl: itemToEdit.pictureUrl
       });
-      setEditItemPictureUrl(itemToEdit.pictureUrl); // Set initial picture URL
+      setEditItemPictureUrl(itemToEdit.pictureUrl); // Set initial picture URL for editing
       setEditItemId(itemId);
     } else {
       console.error(`Item with ID ${itemId} not found in category ${categoryId}`);
@@ -131,7 +131,7 @@ const EditableMenu = () => {
   const handleEditItemImageChange = (event) => {
     const file = event.target.files[0];
     if (file.size > 150 * 1024) { // Check if the file size exceeds 150KB
-      alert("حجم فایل انتخاب شده بیشتر از 150 کیلوبایت است. لطفا فایل دیگری انتخاب کنید.");
+      alert("Selected file size exceeds 150KB. Please choose another file.");
       setEditedItemImage(null); // Reset the selected file
       return;
     }
@@ -140,7 +140,7 @@ const EditableMenu = () => {
 
   const handleUploadEditedItemImage = () => {
     if (!editedItemImage) {
-      alert("لطفا یک تصویر جدید انتخاب کنید.");
+      alert("Please select a new image.");
       return;
     }
 
@@ -153,11 +153,11 @@ const EditableMenu = () => {
         // Extracting the file name from the URL
         const pictureUrl = response.data.url.split('/').pop();
         setEditItemPictureUrl(pictureUrl);
-        alert("تصویر جدید با موفقیت آپلود شد!");
+        alert("New image uploaded successfully!");
       })
       .catch((error) => {
-        console.error("خطا در آپلود تصویر:", error);
-        alert("خطا در آپلود تصویر. لطفا دوباره تلاش کنید.");
+        console.error("Error uploading image:", error);
+        alert("Error uploading image. Please try again.");
       })
       .finally(() => {
         setUploading(false);
@@ -204,7 +204,7 @@ const EditableMenu = () => {
     if (step < 3) {
       setStep(prevStep => prevStep + 1);
     } else {
-      addItem();
+      addItem(); // If already on step 3, proceed to add item
     }
   };
 
@@ -216,7 +216,7 @@ const EditableMenu = () => {
 
   return (
     <div className="editable-menu-container">
-      <h1 className="editable-menu-heading">ویرایش منو</h1>
+      <h1 className="editable-menu-heading">اضافه کردن آیتم</h1>
       {step === 1 && (
         <div className="menu-form">
           <select
@@ -234,16 +234,24 @@ const EditableMenu = () => {
       )}
       {step === 2 && (
         <div className="menu-form">
+          <label className="custom-file-upload">
           <input
             type="file"
             onChange={handleFileChange}
             className="input-field"
           />
-          <button onClick={prevStep} className="prev-button">مرحله قبل</button>
+          <i className="fa fa-cloud-upload"></i> برای انتخاب عکس کلیک کنید
+        </label>
+        {selectedFile && (
+             <div className="file-preview">
+               <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="preview-image" />
+             </div>
+           )}
+
+          
           <button onClick={handleFileUpload} className="upload-button" disabled={uploading}>
-            {uploading ? <div className="loading-spinner"></div> : 'آپلود تصویر'}
+            {uploading ? <div className="loading-spinner"></div> : 'ارسال عکس به سرور و رفتن به مرحله بعدی'}
           </button>
-          <button onClick={nextStep} className="next-button">مرحله بعد</button>
         </div>
       )}
       {step === 3 && (
@@ -263,50 +271,49 @@ const EditableMenu = () => {
             className="input-field"
           />
           <input
-            type="text"
+            type="number"
             placeholder="قیمت"
             value={newItem.price}
             onChange={(e) => handleNewItemChange("price", e.target.value)}
             className="input-field"
           />
-          <button onClick={prevStep} className="prev-button">مرحله قبل</button>
-          <button onClick={addItem} className="add-button">افزودن آیتم به منو</button>
+          <button onClick={addItem} className="add-button" disabled={uploading}>
+            {savingMenu ? <div className="loading-spinner"></div> : 'افزودن غذا به لیست به صورت موقت'}
+          </button>
         </div>
       )}
-      <button onClick={saveMenu} className="save-button" disabled={savingMenu}>
-        {savingMenu ? <div className="loading-spinner"></div> : 'ذخیره منو'}
+{/* Save menu button */}
+<button onClick={saveMenu} className="save-button" disabled={savingMenu}>
+        {savingMenu ? <div className="loading-spinner"></div> : 'ذخیره منو به صورت دائم'}
       </button>
-      <div className="menu-items-list">
+      {/* Render menu items */}
+      <div className="menu-list">
         {Object.keys(menu).map((category, index) => (
-          <div key={index} className="menu-category">
-            <h2>{category}</h2>
+          <div key={index}>
+            <h2 className="category-heading">{category}</h2>
             <table>
+              <thead>
+                <tr>
+                  <th>تصویر</th>
+                  <th>نام</th>
+                  <th>توضیحات</th>
+                  <th>قیمت</th>
+                  <th>عملیات</th>
+                </tr>
+              </thead>
               <tbody>
-                {menu[category].map((item, index) => (
+                {menu[category].map((item, itemIndex) => (
                   <tr key={item.id}>
-                    <td>{item.name}</td>
-                    <td>{item.description}</td>
-                    <td>{item.price}</td>
                     <td>
                       {editItemId === item.id ? (
-                        <div>
-                          <input
-                            type="file"
-                            onChange={handleEditItemImageChange}
-                            className="input-field"
-                          />
-                          <button
-                            onClick={handleUploadEditedItemImage}
-                            className="upload-button"
-                            disabled={uploading}
-                          >
-                            {uploading ? (
-                              <div className="loading-spinner"></div>
-                            ) : (
-                              'آپلود تصویر جدید'
-                            )}
-                          </button>
-                        </div>
+                        <label className="custom-file-upload">
+                        <input
+                          type="file"
+                          onChange={handleFileChange}
+                          className="input-field"
+                        />
+                        <i className="fa fa-cloud-upload"></i> برای انتخاب عکس جدید کلیک کنید
+                      </label>
                       ) : (
                         <img
                           src={`${config.apiBaseUrl}${config.uploaddir}${item.pictureUrl}`}
@@ -317,14 +324,52 @@ const EditableMenu = () => {
                     </td>
                     <td>
                       {editItemId === item.id ? (
-                        <div>
-                          <button onClick={saveEditedItem} className="edit-button">ذخیره</button>
-                          <button onClick={cancelEdit} className="cancel-button">لغو</button>
-                        </div>
+                        <input
+                          type="text"
+                          value={editedItem.name}
+                          onChange={(e) => setEditedItem({ ...editedItem, name: e.target.value })}
+                          className="input-field"
+                        />
                       ) : (
-                        <button onClick={() => handleEdit(category, item.id)} className="edit-button">ویرایش</button>
+                        item.name
                       )}
-                      <button onClick={() => removeItem(category, item.id)} className="remove-button">حذف</button>
+                    </td>
+                    <td>
+                      {editItemId === item.id ? (
+                        <input
+                          type="text"
+                          value={editedItem.description}
+                          onChange={(e) => setEditedItem({ ...editedItem, description: e.target.value })}
+                          className="input-field"
+                        />
+                      ) : (
+                        item.description
+                      )}
+                    </td>
+                    <td>
+                      {editItemId === item.id ? (
+                        <input
+                          type="text"
+                          value={editedItem.price}
+                          onChange={(e) => setEditedItem({ ...editedItem, price: e.target.value })}
+                          className="input-field"
+                        />
+                      ) : (
+                        item.price
+                      )}
+                    </td>
+                    <td>
+                      {editItemId === item.id ? (
+                        <>
+                          <button onClick={saveEditedItem} className="save-button">ذخیره</button>
+                          <button onClick={cancelEdit} className="cancel-button">لغو</button>
+                        </>
+                      ) : (
+                        <>
+                          <button onClick={() => handleEdit(category, item.id)} className="edit-button">ویرایش</button>
+                          <button onClick={() => removeItem(category, item.id)} className="remove-button">حذف</button>
+                        </>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -333,6 +378,8 @@ const EditableMenu = () => {
           </div>
         ))}
       </div>
+
+      
     </div>
   );
 };
