@@ -1,124 +1,139 @@
-/* General styling */
+/* EditableMenu.css */
+
 .editable-menu-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 800px;
+  margin: auto;
   padding: 20px;
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
+  background-color: #f7f7f7;
+  border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .editable-menu-heading {
   text-align: center;
-  margin-bottom: 20px;
+  font-size: 24px;
   color: #333;
+  margin-bottom: 20px;
 }
 
-.menu-form, .menu-list {
-  margin-bottom: 20px;
+.menu-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .input-field {
-  width: calc(100% - 22px);
+  width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
-}
-
-.input-field[type="file"] {
-  padding: 3px;
-}
-
-.upload-button, .add-item-button, .save-menu-button, .save-button, .cancel-button, .edit-button, .delete-button {
-  padding: 10px 15px;
-  margin: 5px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.upload-button, .add-item-button, .save-menu-button {
-  background-color: #5cb85c;
-  color: white;
-}
-
-.upload-button:disabled, .add-item-button:disabled, .save-menu-button:disabled {
-  background-color: #ccc;
-}
-
-.save-button {
-  background-color: #0275d8;
-  color: white;
-}
-
-.cancel-button {
-  background-color: #d9534f;
-  color: white;
-}
-
-.edit-button {
-  background-color: #f0ad4e;
-  color: white;
-}
-
-.delete-button {
-  background-color: #d9534f;
-  color: white;
-}
-
-.category-container {
-  margin-bottom: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-}
-
-.category-heading {
-  margin-bottom: 10px;
-  color: #555;
-}
-
-.items-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 10px;
-}
-
-.items-table th, .items-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
-}
-
-.items-table th {
-  background-color: #f2f2f2;
-  color: #333;
+  direction: rtl; /* Right-to-left text direction for Persian text */
 }
 
 .file-preview {
-  margin-bottom: 10px;
+  margin-top: 10px;
   text-align: center;
 }
 
 .preview-image {
   max-width: 100px;
   max-height: 100px;
+  margin-top: 10px;
+}
+
+.upload-button,
+.add-button,
+.save-button,
+.edit-button,
+.cancel-button,
+.remove-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.upload-button:disabled,
+.save-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
 }
 
 .loading-spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
-  width: 36px;
-  height: 36px;
   border-radius: 50%;
-  border-left-color: #09f;
-  animation: spin 1s ease infinite;
+  border-top: 4px solid #007bff;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.menu-items-list {
+  margin-top: 20px;
+}
+
+.menu-category {
+  margin-bottom: 20px;
+}
+
+.menu-category h2 {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 10px;
+  direction: rtl; /* Right-to-left text direction for Persian text */
+}
+
+.item-image {
+  max-width: 100px;
+  max-height: 100px;
+  border-radius: 4px;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table td,
+table th {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid #ccc;
+}
+
+.table-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 768px) {
+  .input-field,
+  .upload-button,
+  .add-button,
+  .save-button,
+  .edit-button,
+  .cancel-button,
+  .remove-button {
+    width: 100%;
+  }
 }

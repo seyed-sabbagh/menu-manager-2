@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import menuData from './data/menuData.ts'; // Assuming you have the initial data stored in a JSON file
+import menuData from '/Users/fapna/restaurant-manager/menu-manager-2/src/data/menuData.ts'; // Assuming you have the initial data stored in a JSON file
 
 function EditableMenu() {
   const [menu, setMenu] = useState(menuData);
