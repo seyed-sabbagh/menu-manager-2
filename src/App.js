@@ -195,7 +195,7 @@ function EditableMenu() {
         {selectedFile && (
           <div className="file-preview">
             {newItem.pictureUrl ? (
-              <img src={`${config.apiBaseUrl}${config.uploadEndpoint}${newItem.pictureUrl}`} alt="Preview" className="preview-image" />
+              <img src={`${config.apiBaseUrl}${config.uploaddir}${newItem.pictureUrl}`} alt="Preview" className="preview-image" />
             ) : (
               <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="preview-image" />
             )}
@@ -258,8 +258,9 @@ function EditableMenu() {
                         className="edit-input"
                       />
                     ) : 
-                    <img src={`${config.apiBaseUrl}${config.uploaddir}${newItem.pictureUrl}${item.pictureUrl}`} alt={item.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                    <img src={`${config.apiBaseUrl}${config.uploaddir}${item.pictureUrl}`} alt={item.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />
                     }
+                    <p>{`${config.apiBaseUrl}${config.uploaddir}${item.pictureUrl}`}</p>
                     </td>
                     <td>
                       {editItemId === item.id ? (
