@@ -17,6 +17,7 @@ const EditableMenu = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [uploading, setUploading] = useState(false); // State for image upload loading indicator
   const [savingMenu, setSavingMenu] = useState(false); // State for saving menu loading indicator
+  const [step, setStep] = useState(1); // Step state for the multi-step process
 
   const addItem = () => {
     if (newItem.category && newItem.name && newItem.description && newItem.price && newItem.pictureUrl) {
@@ -42,6 +43,7 @@ const EditableMenu = () => {
       setMenu(newMenu);
       setNewItem({ category: "", name: "", description: "", price: "", pictureUrl: "" });
       setSelectedFile(null);
+      setStep(1); // Reset to step 1
     } else {
       alert("لطفا تمامی فیلدها را پر کنید.");
     }
@@ -186,63 +188,87 @@ const EditableMenu = () => {
     return Math.random().toString(36).substr(2, 9);
   };
 
+  const nextStep = () => {
+    if (step < 3) {
+      setStep(prevStep => prevStep + 1);
+    } else {
+      addItem();
+    }
+  };
+
+  const prevStep = () => {
+    if (step > 1) {
+      setStep(prevStep => prevStep - 1);
+    }
+  };
+
   return (
     <div className="editable-menu-container">
       <h1 className="editable-menu-heading">ویرایش منو</h1>
-      <div className="menu-form">
-        <select
-          value={newItem.category}
-          onChange={(e) => handleNewItemChange("category", e.target.value)}
-          className="input-field"
-        >
-          <option value="">انتخاب دسته بندی</option>
-          {categoriesList.map((category, index) => (
-            <option key={index} value={category}>{category}</option>
-          ))}
-        </select>
-        <input
-          type="text"
-          placeholder="نام"
-          value={newItem.name}
-          onChange={(e) => handleNewItemChange("name", e.target.value)}
-          className="input-field"
-        />
-        <input
-          type="text"
-          placeholder="توضیحات"
-          value={newItem.description}
-          onChange={(e) => handleNewItemChange("description", e.target.value)}
-          className="input-field"
-        />
-        <input
-          type="text"
-          placeholder="قیمت"
-          value={newItem.price}
-          onChange={(e) => handleNewItemChange("price", e.target.value)}
-          className="input-field"
-        />
-        <input
-          type="file"
-          onChange={handleFileChange}
-          className="input-field"
-        />
-        {selectedFile && (
-          <div className="file-preview">
-            {newItem.pictureUrl ? (
-              <img src={`${config.apiBaseUrl}${config.uploaddir}${newItem.pictureUrl}`} alt="Preview" className="preview-image" />
-            ) : (
+      {step === 1 && (
+        <div className="menu-form">
+          <select
+            value={newItem.category}
+            onChange={(e) => handleNewItemChange("category", e.target.value)}
+            className="input-field"
+          >
+            <option value="">انتخاب دسته بندی</option>
+            {categoriesList.map((category, index) => (
+              <option key={index} value={category}>{category}</option>
+            ))}
+          </select>
+          <button onClick={nextStep} className="next-button">مرحله بعد</button>
+        </div>
+      )}
+      {step === 2 && (
+        <div className="menu-form">
+          <input
+            type="file"
+            onChange={handleFileChange}
+            className="input-field"
+          />
+          {selectedFile && (
+            <div className="file-preview">
               <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="preview-image" />
-            )}
-          </div>
-        )}
-        <button onClick={handleFileUpload} className="upload-button" disabled={uploading}>
-          {uploading ? <div className="loading-spinner"></div> : 'آپلود تصویر'}
-        </button>
-        <button onClick={addItem} className="add-button">افزودن آیتم به منو</button>
-        <button onClick={saveMenu} className="save-button" disabled={savingMenu}>
-          {savingMenu ? <div className="loading-spinner"></div> : 'ذخیره منو'}
-        </button>
-      </div>
+            </div>
+          )}
+          <button onClick={handleFileUpload} className="upload-button" disabled={uploading}>
+            {uploading ? <div className="loading-spinner"></div> : 'آپلود تصویر'}
+          </button>
+          <button onClick={prevStep} className="prev-button">مرحله قبل</button>
+          <button onClick={nextStep} className="next-button">مرحله بعد</button>
+        </div>
+      )}
+      {step === 3 && (
+        <div className="menu-form">
+          <input
+            type="text"
+            placeholder="نام"
+            value={newItem.name}
+            onChange={(e) => handleNewItemChange("name", e.target.value)}
+            className="input-field"
+          />
+          <input
+            type="text"
+            placeholder="توضیحات"
+            value={newItem.description}
+            onChange={(e) => handleNewItemChange("description", e.target.value)}
+            className="input-field"
+          />
+          <input
+            type="text"
+            placeholder="قیمت"
+            value={newItem.price}
+            onChange={(e) => handleNewItemChange("price", e.target.value)}
+            className="input-field"
+          />
+          <button onClick={prevStep} className="prev-button">مرحله قبل</button>
+          <button onClick={addItem} className="add-button">افزودن آیتم به منو</button>
+        </div>
+      )}
+      <button onClick={saveMenu} className="save-button" disabled={savingMenu}>
+        {savingMenu ? <div className="loading-spinner"></div> : 'ذخیره منو'}
+      </button>
       <div className="menu-items-list">
         {Object.keys(menu).map((category, index) => (
           <div key={index} className="menu-category">

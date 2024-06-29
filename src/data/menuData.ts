@@ -4,7 +4,7 @@ const menuData = {
       "id": 1,
       "name": "مخصوص سرو",
       "description": "فیله مرغ،فیله گوسفند،ژامبون گوشت",
-      "pictureUrl": "PHOTO-2024-06-16-11-54-43 7.jpg",
+      "pictureUrl": "logoNo2.png",
       "price": "195000295000"
     },
     {
