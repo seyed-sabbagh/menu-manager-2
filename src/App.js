@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './EditableMenu.css'; // Import CSS file for styling
 import config from './config.js'; // Import configuration file
 
-const menuData = require('/Users/fapna/restaurant-manager/menu-manager-2/src/data/menuData.ts'); // Assuming menuData.ts contains initial menu data
+const menuData = require('/root/menu-manager-2/src/data/menuData.ts'); // Assuming menuData.ts contains initial menu data
 
 const categoriesList = Object.keys(menuData); // Extracting categories from menuData keys
+
 
 const EditableMenu = () => {
   const [menu, setMenu] = useState(menuData);
@@ -18,6 +19,14 @@ const EditableMenu = () => {
   const [uploading, setUploading] = useState(false); // State for image upload loading indicator
   const [savingMenu, setSavingMenu] = useState(false); // State for saving menu loading indicator
   const [step, setStep] = useState(1); // Step state for the multi-step process
+  const [uploadingEditedItem, setUploadingEditedItem] = useState(false);
+
+
+  useEffect(() => {
+    if (editedItemImage) {
+      handleUploadEditedItemImage();
+    }
+  }, [editedItemImage]); // Automatically upload edited image when editedItemImage changes
 
   const addItem = () => {
     if (newItem.category && newItem.name && newItem.description && newItem.price && newItem.pictureUrl) {
@@ -77,7 +86,11 @@ const EditableMenu = () => {
     const formData = new FormData();
     formData.append('file', selectedFile);
   
-    axios.post(`${config.apiBaseUrl}${config.uploadEndpoint}`, formData)
+    axios.post(`${config.apiBaseUrl}${config.uploadEndpoint}`, formData, {
+      onUploadProgress: progressEvent => {
+        console.log('Upload Progress:', Math.round((progressEvent.loaded / progressEvent.total) * 100));
+      }
+    })
       .then((response) => {
         // Extracting the file name from the URL
         const pictureUrl = response.data.url.split('/').pop();
@@ -93,7 +106,7 @@ const EditableMenu = () => {
         setUploading(false);
       });
   };
-  
+
   const saveMenu = () => {
     setSavingMenu(true); // Start saving menu indicator
 
@@ -144,26 +157,37 @@ const EditableMenu = () => {
       alert("Please select a new image.");
       return;
     }
-
-    setUploading(true);
+  
+    setUploadingEditedItem(true); // Show loading spinner
+  
     const formData = new FormData();
     formData.append('file', editedItemImage);
-
-    axios.post(`${config.apiBaseUrl}${config.uploadEndpoint}`, formData)
+  
+    axios.post(`${config.apiBaseUrl}${config.uploadEndpoint}`, formData, {
+      onUploadProgress: progressEvent => {
+        console.log('Upload Progress:', Math.round((progressEvent.loaded / progressEvent.total) * 100));
+      }
+    })
       .then((response) => {
         // Extracting the file name from the URL
         const pictureUrl = response.data.url.split('/').pop();
         setEditItemPictureUrl(pictureUrl);
         alert("New image uploaded successfully!");
+        setEditedItem(prevEditedItem => ({
+          ...prevEditedItem,
+          pictureUrl: pictureUrl
+        }));
       })
       .catch((error) => {
         console.error("Error uploading image:", error);
         alert("Error uploading image. Please try again.");
       })
       .finally(() => {
-        setUploading(false);
+        setUploadingEditedItem(false); // Hide loading spinner after upload completes
       });
   };
+  
+  
 
   const saveEditedItem = () => {
     if (!editedItem.category) {
@@ -234,22 +258,26 @@ const EditableMenu = () => {
         </div>
       )}
       {step === 2 && (
+        
         <div className="menu-form">
-          <label className="custom-file-upload">
           <input
             type="file"
             onChange={handleFileChange}
             className="input-field"
           />
-          <i className="fa fa-cloud-upload"></i> برای انتخاب عکس کلیک کنید
-        </label>
-        {selectedFile && (
-             <div className="file-preview">
-               <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="preview-image" />
-             </div>
-           )}
-
-          
+          <label className="custom-file-upload">
+            <input
+              type="file"
+              onChange={handleFileChange}
+              className="input-field"
+            />
+            <i className="fa fa-cloud-upload"></i> برای انتخاب عکس کلیک کنید
+          </label>
+          {selectedFile && (
+            <div className="file-preview">
+              <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="preview-image" />
+            </div>
+          )}
           <button onClick={handleFileUpload} className="upload-button" disabled={uploading}>
             {uploading ? <div className="loading-spinner"></div> : 'ارسال عکس به سرور و رفتن به مرحله بعدی'}
           </button>
@@ -283,8 +311,8 @@ const EditableMenu = () => {
           </button>
         </div>
       )}
-{/* Save menu button */}
-<button onClick={saveMenu} className="save-button" disabled={savingMenu}>
+      {/* Save menu button */}
+      <button onClick={saveMenu} className="save-button" disabled={savingMenu}>
         {savingMenu ? <div className="loading-spinner"></div> : 'ذخیره منو به صورت دائم'}
       </button>
       {/* Render menu items */}
@@ -306,23 +334,28 @@ const EditableMenu = () => {
                 {menu[category].map((item, itemIndex) => (
                   <tr key={item.id}>
                     <td>
-                      {editItemId === item.id ? (
-                        <label className="custom-file-upload">
-                        <input
-                          type="file"
-                          onChange={handleFileChange}
-                          className="input-field"
-                        />
-                        <i className="fa fa-cloud-upload"></i> برای انتخاب عکس جدید کلیک کنید
-                      </label>
-                      ) : (
-                        <img
-                          src={`${config.apiBaseUrl}${config.uploaddir}${item.pictureUrl}`}
-                          alt={item.name}
-                          className="item-image"
-                        />
-                      )}
-                    </td>
+  {editItemId === item.id ? (
+    <label className="custom-file-upload">
+      {uploadingEditedItem ? (
+        <div className="loading-spinner"></div> // Show spinner while uploading
+      ) : (
+        <input
+          type="file"
+          onChange={handleEditItemImageChange}
+          className="input-field"
+        />
+      )}
+      <i className="fa fa-cloud-upload "></i> برای انتخاب عکس جدید کلیک کنید
+    </label>
+  ) : (
+    <img
+      src={`${config.apiBaseUrl}${config.uploaddir}${item.pictureUrl}`}
+      alt={item.name}
+      className="item-image"
+    />
+  )}
+</td>
+
                     <td>
                       {editItemId === item.id ? (
                         <input
@@ -379,8 +412,6 @@ const EditableMenu = () => {
           </div>
         ))}
       </div>
-
-      
     </div>
   );
 };

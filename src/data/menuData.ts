@@ -64,10 +64,10 @@ const menuData = {
       "price": "195000298000"
     },
     {
-      "id": "ufdrsdinv",
+      "id": "3jkvdfrq5",
       "name": "asd",
       "description": "asd",
-      "pictureUrl": "sarv_logo.png",
+      "pictureUrl": "A_very_simple_A4_landscape_template_for_a_software.png",
       "price": "123"
     }
   ],
