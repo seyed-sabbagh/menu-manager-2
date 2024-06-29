@@ -258,13 +258,7 @@ const EditableMenu = () => {
         </div>
       )}
       {step === 2 && (
-        
         <div className="menu-form">
-          <input
-            type="file"
-            onChange={handleFileChange}
-            className="input-field"
-          />
           <label className="custom-file-upload">
             <input
               type="file"
