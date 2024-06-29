@@ -57,7 +57,13 @@ const EditableMenu = () => {
   };
 
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+    const file = event.target.files[0];
+    if (file.size > 100 * 1024) { // Check if the file size exceeds 150KB
+      alert("حجم فایل انتخاب شده بیشتر از 100 کیلوبایت است. لطفا فایل دیگری انتخاب کنید.");
+      setSelectedFile(null); // Reset the selected file
+      return;
+    }
+    setSelectedFile(file);
   };
 
   const handleFileUpload = () => {
@@ -123,7 +129,13 @@ const EditableMenu = () => {
   };
 
   const handleEditItemImageChange = (event) => {
-    setEditedItemImage(event.target.files[0]);
+    const file = event.target.files[0];
+    if (file.size > 150 * 1024) { // Check if the file size exceeds 150KB
+      alert("حجم فایل انتخاب شده بیشتر از 150 کیلوبایت است. لطفا فایل دیگری انتخاب کنید.");
+      setEditedItemImage(null); // Reset the selected file
+      return;
+    }
+    setEditedItemImage(file);
   };
 
   const handleUploadEditedItemImage = () => {
@@ -227,16 +239,10 @@ const EditableMenu = () => {
             onChange={handleFileChange}
             className="input-field"
           />
-          {selectedFile && (
-            <div className="file-preview">
-              <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="preview-image" />
-            </div>
-          )}
+          <button onClick={prevStep} className="prev-button">مرحله قبل</button>
           <button onClick={handleFileUpload} className="upload-button" disabled={uploading}>
             {uploading ? <div className="loading-spinner"></div> : 'آپلود تصویر'}
           </button>
-          <button onClick={prevStep} className="prev-button">مرحله قبل</button>
-          <button onClick={nextStep} className="next-button">مرحله بعد</button>
         </div>
       )}
       {step === 3 && (
