@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './EditableMenu.css'; // Import CSS file for styling
-import config from './config'; // Import configuration file
+import config from './config.js'; // Import configuration file
 const menuData = require('./data/menuData.ts'); // Assuming menuData.ts contains initial menu data
 
 
@@ -257,8 +257,9 @@ function EditableMenu() {
                         onChange={(e) => setEditedItem({ ...editedItem, pictureUrl: e.target.value })}
                         className="edit-input"
                       />
-                    ) : <img src={`${config.apiBaseUrl}${config.uploaddir}${newItem.pictureUrl}${item.pictureUrl}`} alt={item.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />}
-                    
+                    ) : 
+                    <img src={`${config.apiBaseUrl}${config.uploaddir}${newItem.pictureUrl}${item.pictureUrl}`} alt={item.name} style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                    }
                     </td>
                     <td>
                       {editItemId === item.id ? (
