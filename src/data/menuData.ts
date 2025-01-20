@@ -1,20 +1,6 @@
 const menuData = {
   "pizza": [
     {
-      "id": 1,
-      "name": "مخصوص سرو",
-      "description": "فیله مرغ،فیله گوسفند،ژامبون گوشت",
-      "pictureUrl": "PHOTO-2024-06-16-11-54-43 5.jpg",
-      "price": "195000295000"
-    },
-    {
-      "id": 2,
-      "name": "استیک ویژه",
-      "description": "مرغ استیک مزه دار شده",
-      "pictureUrl": "ÚÙÙÚ©Ø¨Ø§Ø¨-ÙØ²ÛØ±Û-4.jpg",
-      "price": "200000"
-    },
-    {
       "id": 3,
       "name": "کنیباله",
       "description": "گوشت چرخ کرده",
@@ -62,13 +48,6 @@ const menuData = {
       "description": "سبزیجات",
       "pictureUrl": "img2.png",
       "price": "195000298000"
-    },
-    {
-      "id": "3jkvdfrq5",
-      "name": "asd",
-      "description": "asd",
-      "pictureUrl": "PHOTO-2024-06-16-11-54-43 5.jpg",
-      "price": "123"
     }
   ],
   "fried": [
@@ -171,13 +150,6 @@ const menuData = {
       "description": "",
       "pictureUrl": "img2.png",
       "price": "196000"
-    },
-    {
-      "id": "vhorqz39b",
-      "name": "چلو کوبیده خشمزه",
-      "description": "کباب",
-      "pictureUrl": "ÚÙÙÚ©Ø¨Ø§Ø¨-ÙØ²ÛØ±Û-4.jpg",
-      "price": "250000"
     }
   ],
   "feed": [
@@ -946,13 +918,6 @@ const menuData = {
       "description": " ",
       "price": "60000",
       "pictureUrl": "img2.png"
-    },
-    {
-      "id": "16dg7sq7s",
-      "name": "نسکافه تروبیکا",
-      "description": "کافه",
-      "pictureUrl": "ÚÙÙÚ©Ø¨Ø§Ø¨-ÙØ²ÛØ±Û-4.jpg",
-      "price": "30000"
     }
   ],
   "icecream": [
